@@ -6,7 +6,8 @@ from django.core.exceptions import ObjectDoesNotExist,MultipleObjectsReturned
 from django.views.decorators.csrf import csrf_exempt
 
 from sunuser.models import User
-from utils.dictutils import to_dict
+from sunuser.dbmodels import Blog,Author,Entry
+from utils.dictutils import to_dict,get_sign
 from utils.httputil import JsonError,JsonSuccess
 
 # Create your views here.
@@ -54,7 +55,7 @@ def login(request):
 	password = request.POST.get('password')
 	try:
 		user = User.objects.get(username=username)
-		if not user.verify_password(password):
+		if user.verify_password(password):
 			user.login()
 			return JsonSuccess(user.as_json())
 		else:
@@ -81,3 +82,63 @@ def  forget(request):
 		return JsonError("the user is not exist")
 	else:
 		return HttpResponse(u'forget')
+
+@csrf_exempt
+def getNews(request):
+	try:
+#		entry = Blog.objects.filter(entry__headline__contains='top')
+		entry = Entry.objects.filter(blog__name__exact='xiaowei hao 1')
+		return HttpResponse(entry)
+	except Exception, e:
+		print e
+		entry = None
+		return JsonError("hello")
+	else:
+		entry = None
+		return JsonError("hello1")
+
+@csrf_exempt
+def getUser(request):
+	if request.method != 'POST':
+		raise Http404(error404)
+	appnum = request.POST.get('appnum')
+	battery = request.POST.get('battery')
+	channelid = request.POST.get('channelid')
+	deviceid = request.POST.get('deviceid')
+	factory = request.POST.get('factory')
+	imsi = request.POST.get('imsi')
+	oscode = request.POST.get('oscode')
+	phoneModel = request.POST.get('phoneModel')
+	platform = request.POST.get('platform')
+	productid = request.POST.get('productid')
+	resolution = request.POST.get('resolution')
+	sd = request.POST.get('sd')
+	isp = request.POST.get('isp')
+	uuid = request.POST.get('uuid')
+	sign = request.POST.get('sign')
+	dict_user ={}
+	dict_user['appnum'] = appnum
+	dict_user['battery'] = battery
+	dict_user['channelid'] = channelid
+	dict_user['platform'] =platform
+	dict_user['productid'] = productid
+	dict_user['resolution'] = resolution
+	dict_user['sd'] = sd
+	dict_user['isp'] = isp
+	dict_user['uuid'] = uuid
+	dict_user['deviceid'] = deviceid
+	dict_user['factory'] = factory
+	dict_user['imsi'] = imsi
+	dict_user['oscode'] = oscode
+	dict_user['phoneModel'] = phoneModel
+
+	if str(get_sign(dict_user)) == sign:
+		return HttpResponse(u'签名认证通过')
+	else:
+		return HttpResponse(u'签名认证失败')
+#	return HttpResponse(dict_user)
+	
+
+
+
+

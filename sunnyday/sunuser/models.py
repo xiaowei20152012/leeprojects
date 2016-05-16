@@ -54,9 +54,9 @@ class User(models.Model):
         self.password = encrypt_pw
 
     def verify_password(self, input_pw):
-    	return self.password is input_pw
-#        encrypt_input_pw = md5(str(self.pw_salt + input_pw))
-#        return encrypt_input_pw is self.password
+#    	return self.password is input_pw
+        encrypt_input_pw = md5(str(self.pw_salt + input_pw))
+        return encrypt_input_pw == self.password
 
     def save_user(self, user_type=0):
         self.uid = str(uuid.uuid4())
