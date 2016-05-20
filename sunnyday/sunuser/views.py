@@ -7,7 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from sunuser.models import User
 from sunuser.dbmodels import Blog,Author,Entry
-from utils.dictutils import to_dict,get_sign
+from utils.dictutils import to_dict,get_sign,createToken
 from utils.httputil import JsonError,JsonSuccess
 
 # Create your views here.
@@ -137,8 +137,35 @@ def getUser(request):
 	else:
 		return HttpResponse(u'签名认证失败')
 #	return HttpResponse(dict_user)
+
+
+@csrf_exempt
+def userexmaple(request):
+	if request.method != 'POST':
+		raise Http404(error404)
+	
+	username = request.POST.get('username')
+	password = request.POST.get('password')
+	try:
+		user = User.objects.get(username=username)
+		if user.verify_password(password):
+			user.login()
+			return JsonSuccess(user.as_json())
+		else:
+			return JsonError("the password is wrong%s" % user.password)
+	except:
+		return JsonError("this user is not exist")
+	else:
+		return JsonError("there is some other problems")
+	
 	
 
+	return JsonError(str(createToken('hello')))
+	
 
+def printinfo(request):
+
+	
+	return makeToken('hello')
 
 

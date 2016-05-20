@@ -19,9 +19,11 @@ from sunuser import views as user_view
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$',user_view.index,name='user_index'),
+    url(r'^user/examples',user_view.userexmaple,name='examples'),
     url(r'^user/register',user_view.register,name='user_register'),
     url(r'^user/login',user_view.login,name='user_login'),
     url(r'^user/forget',user_view.forget,name='user_forget'),
     url(r'^user/getNews',user_view.getNews,name='user_getnews'),
     url(r'^Apiv2/user/getUser',user_view.getUser,name='user_getuser'),
+
 ]

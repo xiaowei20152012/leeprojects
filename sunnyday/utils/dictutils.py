@@ -1,3 +1,4 @@
+#coding=utf-8
 from django.db.models import DateTimeField
 from django.db.models.fields.related import ManyToManyField
 from utils.md5util import md5
@@ -31,5 +32,19 @@ def DelLastChar(str):
     str_list=list(str)
     str_list.pop()
     return "".join(str_list)
+
+"""这是生成token的方法"""
+def createToken(user_msg):  
+
+    import time
+    import base64
+    from utils.md5util import md5
+    rnd = time.time()
+    user_msg = str(user_msg)+str(rnd)
+    basernd = base64.encodestring(str(user_msg))
+    return md5(str(basernd))
+
+
+
 
 

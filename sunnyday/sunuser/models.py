@@ -113,3 +113,12 @@ class UserRoles(models.Model):
 class RolesPermission(models.Model):
     roles_id = models.IntegerField()
     permission_id = models.IntegerField()
+
+
+class UserToken(models.Model):
+    user = models.CharField(max_length=100)
+    token = models.CharField(max_length=255)
+    time = models.DateTimeField()
+
+    def __unicode__(self):
+        return self.user
