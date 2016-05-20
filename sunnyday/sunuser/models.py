@@ -4,6 +4,7 @@ import logging
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
+from utils.dictutils import createToken
 
 from utils.md5util import md5
 
@@ -69,12 +70,13 @@ class User(models.Model):
         user_roles.save()
 
     def login(self):
-        self.token = str(uuid.uuid4())
+        self.token = str(createToken('mylogin'))
         self.token_utime = timezone.now()
         self.save()
 
     def verify_token(self, token):
         # 后续加上token过期判断,根据token_utime判断是否过期
+        
         return token is self.token
 
     def as_json(self):
@@ -115,10 +117,4 @@ class RolesPermission(models.Model):
     permission_id = models.IntegerField()
 
 
-class UserToken(models.Model):
-    user = models.CharField(max_length=100)
-    token = models.CharField(max_length=255)
-    time = models.DateTimeField()
 
-    def __unicode__(self):
-        return self.user

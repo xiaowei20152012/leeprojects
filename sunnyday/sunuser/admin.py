@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from sunuser.dbmodels import Blog,Author,Entry
-from sunuser.models import User,Roles,Permission,ThirdPartyRelation,UserRoles,RolesPermission,UserToken
+from sunuser.models import User,Roles,Permission,ThirdPartyRelation,UserRoles,RolesPermission
 
 # Register your models here.
 
